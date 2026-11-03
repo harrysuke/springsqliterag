@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: harrysuke/springsqliteMyBatis
+  IMAGE_NAME: harrysuke/springsqliterag
 
 # Cancel superseded runs for the same ref so rapid pushes do not spawn
 # overlapping multi-arch builds.
