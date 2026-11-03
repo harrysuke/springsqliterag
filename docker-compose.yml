@@ -1,18 +1,43 @@
 services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: springsqlite-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    environment:
+      - OLLAMA_ORIGINS=*
+    restart: unless-stopped
+    # Pull models on first start via an init helper
+    entrypoint: >
+      sh -c '
+        ollama serve &
+        sleep 5
+        ollama pull nomic-embed-text
+        ollama pull llama3.2
+        wait
+      '
+
   springsqlite:
     build:
       context: .
       dockerfile: Dockerfile
-    image: harrysuke/springsqlitemybatis:latest
+    image: harrysuke/springsqliteaiml:latest
     container_name: springsqlite
     ports:
       - "8080:8080"
     environment:
       DB_URL: jdbc:sqlite:/data/springdb.db
+      RAG_OLLAMA_BASE_URL: http://ollama:11434
     volumes:
       - springsqlite-data:/data
+    depends_on:
+      - ollama
     restart: unless-stopped
 
 volumes:
   springsqlite-data:
     name: springsqlite-data
+  ollama-data:
+    name: ollama-data

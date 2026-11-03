@@ -5,6 +5,7 @@
         <li class="nav-item"><a class="nav-link" href="${contextPath}/saas/dashboard">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link" href="${contextPath}/users">Users</a></li>
         <li class="nav-item"><a class="nav-link" href="${contextPath}/books">Books</a></li>
+        <li class="nav-item"><a class="nav-link" href="${contextPath}/rag/chat">RAG Chat</a></li>
     </ul>
     <div class="sidebar-heading">SaaS</div>
     <ul class="nav flex-column">

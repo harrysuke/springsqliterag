@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springjte.repository.mybatis.DocumentChunkMapper">
+
+    <!-- Embedding is stored as a BLOB of little-endian 32-bit floats.
+         The type handler converts between FloatArray and BLOB automatically. -->
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO document_chunks (document_id, chunk_index, content, embedding, vector_dim)
+        VALUES (#{documentId}, #{chunkIndex}, #{content},
+                #{embedding, typeHandler=com.example.springjte.config.FloatArrayTypeHandler},
+                #{vectorDim})
+    </insert>
+
+    <insert id="insertBatch">
+        INSERT INTO document_chunks (document_id, chunk_index, content, embedding, vector_dim)
+        VALUES
+        <foreach collection="chunks" item="c" separator=",">
+            (#{c.documentId}, #{c.chunkIndex}, #{c.content},
+             #{c.embedding, typeHandler=com.example.springjte.config.FloatArrayTypeHandler},
+             #{c.vectorDim})
+        </foreach>
+    </insert>
+
+    <select id="findByDocumentId" resultType="DocumentChunk">
+        SELECT id, document_id AS documentId, chunk_index AS chunkIndex,
+               content,
+               embedding,
+               vector_dim AS vectorDim
+        FROM document_chunks
+        WHERE document_id = #{documentId}
+        ORDER BY chunk_index
+    </select>
+
+    <select id="findAll" resultType="DocumentChunk">
+        SELECT id, document_id AS documentId, chunk_index AS chunkIndex,
+               content,
+               embedding,
+               vector_dim AS vectorDim
+        FROM document_chunks
+        ORDER BY document_id, chunk_index
+    </select>
+
+    <delete id="deleteByDocumentId">
+        DELETE FROM document_chunks WHERE document_id = #{documentId}
+    </delete>
+
+</mapper>

@@ -53,6 +53,9 @@ class SecurityConfig(
                     // Book catalog — any authenticated member, matching the ASP.NET Core
                     // "MemberOnly" policy the original BookController used
                     .requestMatchers("/books/**", "/api/books/**").authenticated()
+                    // RAG chat pages and API — any authenticated user
+                    .requestMatchers("/rag/**").authenticated()
+                    .requestMatchers("/api/rag/**").authenticated()
                     // SaaS API endpoints — admin only for mutations
                     .requestMatchers(HttpMethod.POST, "/api/users", "/api/users/*").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")

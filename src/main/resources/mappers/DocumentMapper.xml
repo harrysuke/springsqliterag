@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springjte.repository.mybatis.DocumentMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO documents (title, source, content, content_type, chunk_count, created_by, created_at)
+        VALUES (#{title}, #{source}, #{content}, #{contentType}, #{chunkCount}, #{createdBy}, datetime('now'))
+    </insert>
+
+    <select id="findById" resultType="Document">
+        SELECT id, title, source, content, content_type AS contentType,
+               chunk_count AS chunkCount, created_by AS createdBy, created_at AS createdAt
+        FROM documents
+        WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultType="Document">
+        SELECT id, title, source, content, content_type AS contentType,
+               chunk_count AS chunkCount, created_by AS createdBy, created_at AS createdAt
+        FROM documents
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByCreatedBy" resultType="Document">
+        SELECT id, title, source, content, content_type AS contentType,
+               chunk_count AS chunkCount, created_by AS createdBy, created_at AS createdAt
+        FROM documents
+        WHERE created_by = #{email}
+        ORDER BY created_at DESC
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM documents WHERE id = #{id}
+    </delete>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM documents
+    </select>
+
+</mapper>

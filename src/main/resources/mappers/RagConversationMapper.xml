@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springjte.repository.mybatis.RagConversationMapper">
+
+    <insert id="insertConversation" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO rag_conversations (session_id, user_email, title, created_at, updated_at)
+        VALUES (#{sessionId}, #{userEmail}, #{title}, datetime('now'), datetime('now'))
+    </insert>
+
+    <insert id="insertMessage" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO rag_messages (conversation_id, role, content, sources, created_at)
+        VALUES (#{conversationId}, #{role}, #{content}, #{sources}, datetime('now'))
+    </insert>
+
+    <select id="findConversationBySessionId" resultType="RagConversation">
+        SELECT id, session_id AS sessionId, user_email AS userEmail,
+               title, created_at AS createdAt, updated_at AS updatedAt
+        FROM rag_conversations
+        WHERE session_id = #{sessionId}
+    </select>
+
+    <select id="findConversationsByUser" resultType="RagConversation">
+        SELECT id, session_id AS sessionId, user_email AS userEmail,
+               title, created_at AS createdAt, updated_at AS updatedAt
+        FROM rag_conversations
+        WHERE user_email = #{email}
+        ORDER BY updated_at DESC
+    </select>
+
+    <select id="findMessagesByConversation" resultType="RagMessage">
+        SELECT id, conversation_id AS conversationId, role, content, sources, created_at AS createdAt
+        FROM rag_messages
+        WHERE conversation_id = #{conversationId}
+        ORDER BY created_at ASC
+    </select>
+
+    <update id="updateConversationTimestamp">
+        UPDATE rag_conversations
+        SET updated_at = datetime('now')
+        WHERE session_id = #{sessionId}
+    </update>
+
+</mapper>
